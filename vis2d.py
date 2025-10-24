@@ -6,8 +6,19 @@ import cvxpy as cvx
 # ---- здесь предполагается, что lpgen уже импортирована из utils ----
 # from utils import lpgen
 
-def visualize_lp2d(A, b, c, x_lower, x_upper, x_star=None,
-                   solve=False, solver=cvx.HIGHS, grid_points=400, title=None):
+
+def visualize_lp2d(
+    A,
+    b,
+    c,
+    x_lower,
+    x_upper,
+    x_star=None,
+    solve=False,
+    solver=cvx.HIGHS,
+    grid_points=400,
+    title=None,
+):
     """
     Визуализация 2D ЛП:
       - заштрихованная область допустимых значений
@@ -51,7 +62,9 @@ def visualize_lp2d(A, b, c, x_lower, x_upper, x_star=None,
     # уровни вокруг значения в x_star, если оно известно
     if x_star is not None:
         v0 = float(c @ np.asarray(x_star).ravel())
-        levels = np.linspace(v0 - 0.5 * max(abs(v0), 1.0), v0 + 0.5 * max(abs(v0), 1.0), 7)
+        levels = np.linspace(
+            v0 - 0.5 * max(abs(v0), 1.0), v0 + 0.5 * max(abs(v0), 1.0), 7
+        )
     else:
         # иначе берем уровни по всему прямоугольнику
         zmin, zmax = np.min(Z), np.max(Z)
@@ -60,7 +73,7 @@ def visualize_lp2d(A, b, c, x_lower, x_upper, x_star=None,
     # рисунок
     plt.figure(figsize=(7.5, 7))
     # область допустимых значений
-    plt.pcolormesh(X1, X2, feas_mask, shading='auto', alpha=0.20)
+    plt.pcolormesh(X1, X2, feas_mask, shading="auto", alpha=0.20)
 
     # линии ограничений Ai1*x1 + Ai2*x2 = b_i (в пределах прямоугольника)
     for i in range(len(b)):
@@ -75,16 +88,21 @@ def visualize_lp2d(A, b, c, x_lower, x_upper, x_star=None,
             if abs(a1[i]) > 1e-12:
                 x_vert = b[i] / a1[i]
                 if x_lower[0] - 1e-9 <= x_vert <= x_upper[0] + 1e-9:
-                    plt.plot([x_vert, x_vert], [x_lower[1], x_upper[1]], linewidth=1.0, alpha=0.6)
+                    plt.plot(
+                        [x_vert, x_vert],
+                        [x_lower[1], x_upper[1]],
+                        linewidth=1.0,
+                        alpha=0.6,
+                    )
 
     # контуры целевой функции
-    cs = plt.contour(X1, X2, Z, levels=levels, linewidths=0.9, linestyles='dashed')
+    cs = plt.contour(X1, X2, Z, levels=levels, linewidths=0.9, linestyles="dashed")
     plt.clabel(cs, inline=True, fontsize=8, fmt="cᵀx=%.1f")
 
     # отметим x_star (если дан)
     if x_star is not None:
         xs = np.asarray(x_star).ravel()
-        plt.scatter([xs[0]], [xs[1]], s=60, marker='o', label='x* (из lpgen)')
+        plt.scatter([xs[0]], [xs[1]], s=60, marker="o", label="x* (из lpgen)")
 
     # при необходимости решим задачу и отметим найденное решение
     x_sol = None
@@ -101,20 +119,21 @@ def visualize_lp2d(A, b, c, x_lower, x_upper, x_star=None,
         prob.solve(solver=solver)
         if x_var.value is not None:
             x_sol = x_var.value.ravel()
-            plt.scatter([x_sol[0]], [x_sol[1]], s=60, marker='x', label='x (решатель)')
+            plt.scatter([x_sol[0]], [x_sol[1]], s=60, marker="x", label="x (решатель)")
 
     plt.xlim(x_lower[0], x_upper[0])
     plt.ylim(x_lower[1], x_upper[1])
-    plt.gca().set_aspect('equal', adjustable='box')
-    plt.xlabel('x₁')
-    plt.ylabel('x₂')
+    plt.gca().set_aspect("equal", adjustable="box")
+    plt.xlabel("x₁")
+    plt.ylabel("x₂")
     if title:
         plt.title(title)
-    plt.legend(loc='best')
+    plt.legend(loc="best")
     plt.tight_layout()
     plt.show()
 
     return x_sol
+
 
 if __name__ == "__main__":
     # Пример: генерируем 2D-задачу через lpgen и визуализируем
@@ -123,19 +142,27 @@ if __name__ == "__main__":
     # Параметры генерации: 2 переменные, 5 ограничений
     A, b, c, (x_lower, x_upper), x_star, lambda_star = lpgen(
         n=2,
-        m=5,
+        m=2,
         delta=30.0,
         a_min=-20.0,
         a_max=20.0,
         lam_min=1.0,
         lam_max=9.0,
-        density=0.6,   # для 2D можно брать повыше, чтобы прямые были разнообразнее
+        density=0.6,  # для 2D можно брать повыше, чтобы прямые были разнообразнее
         seed=42,
         save_to=None,
     )
 
     # Визуализация и решение (HiGHS); можно поставить solve=False, чтобы только рисовать
-    visualize_lp2d(A, b, c, x_lower, x_upper, x_star=x_star,
-                   solve=True, solver=cvx.HIGHS,
-                   grid_points=500,
-                   title="2D LP: область допустимых значений, ограничения и изолинии цели")
+    visualize_lp2d(
+        A,
+        b,
+        c,
+        x_lower,
+        x_upper,
+        x_star=x_star,
+        solve=True,
+        solver=cvx.HIGHS,
+        grid_points=500,
+        title="2D LP: область допустимых значений, ограничения и изолинии цели",
+    )
