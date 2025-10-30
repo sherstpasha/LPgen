@@ -91,7 +91,7 @@ def evaluate_config(cfg, note=""):
     rec["all_optimal"] = ok
     results.append(rec)
 
-    return rec["time_2000"]  # критерий выбора лучшего
+    return rec["time_2000"]
 
 
 # ======================
@@ -103,17 +103,28 @@ print("baseline =>", base_time)
 
 
 # ======================
-# COORDINATE DESCENT
+# COORDINATE TUNING
 # ======================
 print("\n=== COORDINATE TUNING ===")
 
 for p in param_space:
+
+    # пропуск simplex_strategy если solver – ipm
+    if p == "simplex_strategy" and best_params["solver"] == "ipm":
+        print(f"\n--- Skipping {p} (solver=ipm) ---")
+        continue
+
     print(f"\n--- Optimizing {p} ---")
     original_value = best_params[p]
     best_local_time = base_time
     best_local_value = original_value
 
     for val in param_space[p]:
+
+        # если тестируем simplex_strategy, убедимся что solver=simplex
+        if p == "simplex_strategy" and best_params["solver"] != "simplex":
+            continue
+
         test_cfg = best_params.copy()
         test_cfg[p] = val
 
@@ -124,13 +135,12 @@ for p in param_space:
             best_local_time = t
             best_local_value = val
 
-    # фиксируем улучшение
     if best_local_value != original_value:
         print(f"{p}: {original_value} → {best_local_value}, выигрыш {base_time:.3f} → {best_local_time:.3f}")
         best_params[p] = best_local_value
         base_time = best_local_time
     else:
-        print(f"улучшений для {p} нет")
+        print(f"Улучшений для {p} нет")
 
 
 # ======================
