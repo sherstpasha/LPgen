@@ -1,7 +1,7 @@
 {
   "solver": "ipm",
-  "presolve": "off",
-  "simplex_strategy": 0,
-  "parallel": "off",
-  "scaling": "off"
+  "simplex_strategy": 1,
+  "presolve": "on",
+  "parallel": "on",
+  "scaling": "on"
 }

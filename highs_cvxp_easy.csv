@@ -1,0 +1,16 @@
+n,time,status
+500,0.01599999999962165,HighsModelStatus.kOptimal
+1000,0.3129999999982829,HighsModelStatus.kOptimal
+1500,0.6559999999990396,HighsModelStatus.kOptimal
+2000,2.1090000000003783,HighsModelStatus.kOptimal
+2500,5.109000000000378,HighsModelStatus.kOptimal
+3000,9.9220000000023,HighsModelStatus.kOptimal
+3500,17.889999999999418,HighsModelStatus.kOptimal
+4000,27.8279999999977,HighsModelStatus.kOptimal
+4500,41.35900000000038,HighsModelStatus.kOptimal
+5000,61.90599999999904,HighsModelStatus.kOptimal
+5500,83.53100000000268,HighsModelStatus.kOptimal
+6000,113.36000000000058,HighsModelStatus.kOptimal
+6500,147.70400000000154,HighsModelStatus.kOptimal
+7000,190.89099999999962,HighsModelStatus.kOptimal
+7500,239.85900000000038,HighsModelStatus.kOptimal
