@@ -1,0 +1,14 @@
+config,note,time_2000,status_2000,all_optimal
+"{""solver"": ""simplex"", ""presolve"": ""on"", ""simplex_strategy"": 1, ""parallel"": ""off"", ""scaling"": ""on""}",baseline,65.64406845904887,HighsModelStatus.kOptimal,False
+"{""solver"": ""simplex"", ""presolve"": ""on"", ""simplex_strategy"": 1, ""parallel"": ""off"", ""scaling"": ""on""}",test solver=simplex,66.21338504203595,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""on"", ""simplex_strategy"": 1, ""parallel"": ""off"", ""scaling"": ""on""}",test solver=ipm,1.6453383329790086,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""on"", ""simplex_strategy"": 1, ""parallel"": ""off"", ""scaling"": ""on""}",test presolve=on,1.6220311659853905,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 1, ""parallel"": ""off"", ""scaling"": ""on""}",test presolve=off,1.5922882501035929,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 0, ""parallel"": ""off"", ""scaling"": ""on""}",test simplex_strategy=0,1.5843000411987305,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 1, ""parallel"": ""off"", ""scaling"": ""on""}",test simplex_strategy=1,1.5874964578542858,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 2, ""parallel"": ""off"", ""scaling"": ""on""}",test simplex_strategy=2,1.59839095803909,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 3, ""parallel"": ""off"", ""scaling"": ""on""}",test simplex_strategy=3,1.5977290419396013,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 0, ""parallel"": ""on"", ""scaling"": ""on""}",test parallel=on,1.5526588337961584,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 0, ""parallel"": ""off"", ""scaling"": ""on""}",test parallel=off,1.5504829999990761,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 0, ""parallel"": ""off"", ""scaling"": ""on""}",test scaling=on,1.5671289169695228,HighsModelStatus.kOptimal,False
+"{""solver"": ""ipm"", ""presolve"": ""off"", ""simplex_strategy"": 0, ""parallel"": ""off"", ""scaling"": ""off""}",test scaling=off,1.5656909581739455,HighsModelStatus.kOptimal,False
