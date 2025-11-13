@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from highspy import Highs
+from tqdm import tqdm
 
 # === НАСТРОЙКИ ===
 DATA_DIR = "benchmarks"
@@ -120,13 +121,19 @@ def solve_problem(path, params):
 
 
 # === ФУНКЦИЯ ОЦЕНКИ КОНФИГУРАЦИИ ===
-def evaluate_config(cfg, file_subset, note=""):
+def evaluate_config(cfg, file_subset, note="", show_progress=False):
     """Оценивает конфигурацию на заданном наборе задач"""
     total_time = 0
     count = 0
     failed = 0
 
-    for fname in file_subset:
+    iterator = (
+        tqdm(file_subset, desc=f"  {note[:40]:40s}", leave=False)
+        if show_progress
+        else file_subset
+    )
+
+    for fname in iterator:
         path = os.path.join(DATA_DIR, fname)
         result = solve_problem(path, cfg)
 
@@ -172,12 +179,12 @@ print("=" * 70)
 best_solver_cfg = best_params.copy()
 best_solver_time = base_time
 
-for s in solver_variants:
+for s in tqdm(solver_variants, desc="Подбор солвера"):
     test_cfg = default_params.copy()
     test_cfg.update(s)
 
     note = f"solver={test_cfg['solver']}"
-    t, solved, failed = evaluate_config(test_cfg, train_files, note)
+    t, solved, failed = evaluate_config(test_cfg, train_files, note, show_progress=True)
 
     tuning_history.append(
         {
@@ -206,7 +213,9 @@ if best_params.get("solver") == "simplex":
     print("ЭТАП 3: ПОДБОР ПАРАМЕТРОВ SIMPLEX")
     print("=" * 70)
 
-    for param_name, param_values in simplex_params.items():
+    for param_name, param_values in tqdm(
+        list(simplex_params.items()), desc="Параметры simplex"
+    ):
         print(f"\nПодбор параметра: {param_name}")
         print("-" * 70)
 
@@ -219,7 +228,9 @@ if best_params.get("solver") == "simplex":
             test_cfg[param_name] = val
 
             note = f"{param_name}={val}"
-            t, solved, failed = evaluate_config(test_cfg, train_files, note)
+            t, solved, failed = evaluate_config(
+                test_cfg, train_files, note, show_progress=True
+            )
 
             tuning_history.append(
                 {
@@ -249,7 +260,9 @@ elif best_params.get("solver") in ["ipm", "ipx"]:
     print("ЭТАП 3: ПОДБОР ПАРАМЕТРОВ IPM")
     print("=" * 70)
 
-    for param_name, param_values in ipm_params.items():
+    for param_name, param_values in tqdm(
+        list(ipm_params.items()), desc="Параметры IPM"
+    ):
         print(f"\nПодбор параметра: {param_name}")
         print("-" * 70)
 
@@ -291,7 +304,9 @@ print("\n" + "=" * 70)
 print("ЭТАП 4: ПОДБОР ОБЩИХ ПАРАМЕТРОВ")
 print("=" * 70)
 
-for param_name, param_values in general_params.items():
+for param_name, param_values in tqdm(
+    list(general_params.items()), desc="Общие параметры"
+):
     print(f"\nПодбор параметра: {param_name}")
     print("-" * 70)
 
@@ -304,7 +319,9 @@ for param_name, param_values in general_params.items():
         test_cfg[param_name] = val
 
         note = f"{param_name}={val}"
-        t, solved, failed = evaluate_config(test_cfg, train_files, note)
+        t, solved, failed = evaluate_config(
+            test_cfg, train_files, note, show_progress=True
+        )
 
         tuning_history.append(
             {
@@ -341,7 +358,7 @@ print("=" * 70)
 
 final_results = []
 
-for fname in sorted(files):
+for fname in tqdm(sorted(files), desc="Финальное тестирование"):
     path = os.path.join(DATA_DIR, fname)
     is_test = fname in test_files
 
