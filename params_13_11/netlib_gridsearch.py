@@ -143,6 +143,7 @@ def solve_problem(path, params):
     """Решает задачу с заданными параметрами"""
     h = Highs()
     h.setOptionValue("output_flag", False)
+    h.setOptionValue("time_limit", 600)  # Таймаут 10 минут
 
     for k, v in params.items():
         try:
